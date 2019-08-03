@@ -165,7 +165,7 @@ struct Config
 
 Config result;
 
-void  display_output_oneline(Tree& tree)
+void  display_oneline(Tree& tree)
 {
 	if(result.pflag == 1)
 	{
@@ -202,26 +202,33 @@ void replace_oneline(Tree & tree)
 	std::vector<std::string> first_split;
 	split(result.rcache,first_split,';');
 	std::vector<std::string> second_split;
-	split(first_split[0],second_split,'-');
-	int temp[10];
-	int layer=second_split.size();
-	for(int j=0;j<layer;j++)
-		temp[j]=stoi(second_split[j]);
-
-	tree.select(layer,temp);
-
-	if(result.rflag == 1)
-    {
-		std::cout<<result.input.substr(0,tree.header->begin+1);
-		std::cout<<first_split[1];
-		std::cout<<result.input.substr(tree.header->end,result.input.size() - tree.header->end)<<std::endl;
-	}
-	else if(result.rflag == 2)
+	int start=0;
+	for(unsigned long i =0;i<first_split.size();i=i+2)
 	{
-		std::cout<<result.input.substr(0,tree.header->begin);
-		std::cout<<first_split[1];
-		std::cout<<result.input.substr(tree.header->end+1,result.input.size() - tree.header->end -1)<<std::endl;
+		split(first_split[i],second_split,'-');
+		int temp[10];
+		int layer=second_split.size();
+		for(int j=0;j<layer;j++)
+			temp[j]=stoi(second_split[j]);
+
+		tree.select(layer,temp);
+		if(result.rflag == 1)
+		{
+			std::cout<<result.input.substr(start,tree.header->begin+1-start);
+			std::cout<<first_split[i+1];
+		    start = tree.header->end;
+		}
+		else if(result.rflag == 2)
+		{
+			std::cout<<result.input.substr(start,tree.header->begin-start);
+			std::cout<<first_split[i+1];
+		    start = tree.header->end+1;
+		}
+
+		second_split.clear();
 	}
+
+	std::cout<<result.input.substr(start,result.input.size() - start)<<std::endl;
 
 }
 
@@ -244,7 +251,7 @@ void final_output()
 {
 	Tree a(result.input,result.left,result.right);
 	if(result.rflag == 0)
-		display_output_oneline(a);
+		display_oneline(a);
 	else
 		replace_oneline(a);
 }
