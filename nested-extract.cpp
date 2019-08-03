@@ -157,6 +157,9 @@ struct Config
 	int fileflag=0;
 	std::string filename;
 
+	int rflag=0;
+	std::string rcache;
+
 	std::string input;
 };
 
@@ -193,6 +196,36 @@ void  display_output_oneline(Tree& tree)
 	}
 }
 
+
+void replace_oneline(Tree & tree)
+{
+	std::vector<std::string> first_split;
+	split(result.rcache,first_split,';');
+	std::vector<std::string> second_split;
+	split(first_split[0],second_split,'-');
+	int temp[10];
+	int layer=second_split.size();
+	for(int j=0;j<layer;j++)
+		temp[j]=stoi(second_split[j]);
+
+	tree.select(layer,temp);
+
+	if(result.rflag == 1)
+    {
+		std::cout<<result.input.substr(0,tree.header->begin+1);
+		std::cout<<first_split[1];
+		std::cout<<result.input.substr(tree.header->end,result.input.size() - tree.header->end)<<std::endl;
+	}
+	else if(result.rflag == 2)
+	{
+		std::cout<<result.input.substr(0,tree.header->begin);
+		std::cout<<first_split[1];
+		std::cout<<result.input.substr(tree.header->end+1,result.input.size() - tree.header->end -1)<<std::endl;
+	}
+
+}
+
+
 void display_help()
 {
 	std::cout<<"Options:"<<std::endl;
@@ -202,6 +235,18 @@ void display_help()
 	std::cout<<" -f	the name of file that needed to be dealt with"<<std::endl;
 	std::cout<<" -p	print which part of string, default behavior is printing the whole string"<<std::endl;
 	std::cout<<" -d	using which delimiter to seperate the output, default symbol is ':'"<<std::endl;
+	std::cout<<" -r	replace the selected content with new content, exclude the pair of symbol"<<std::endl;
+	std::cout<<" -R	replace the selected content with new content, include the pair of symbol"<<std::endl;
+}
+
+
+void final_output()
+{
+	Tree a(result.input,result.left,result.right);
+	if(result.rflag == 0)
+		display_output_oneline(a);
+	else
+		replace_oneline(a);
 }
 
 
@@ -210,7 +255,7 @@ int main(int argc, char* argv[])
 
 
 	int options;
-	const char * optstring="hs:d:p:f:a:";
+	const char * optstring="hs:d:p:f:a:r:R:";
 	while ((options= getopt(argc, argv, optstring)) != -1)
 	{
 		switch(options)
@@ -236,19 +281,25 @@ int main(int argc, char* argv[])
 			case 'a':
 				result.fileflag = 2;
 				result.input = optarg;
+				break;
+			case 'r':
+				result.rflag = 1;
+				result.rcache = optarg;
+				break;
+            case 'R':
+				result.rflag = 2;
+				result.rcache = optarg;
+				break;
 		}
 	}
 
 
-    if(result.fileflag == 0)
+    if(result.fileflag == 0) // pipeline input
 	{
 		while(getline(std::cin,result.input))
-		{
-			Tree a(result.input,result.left,result.right);
-			display_output_oneline(a);
-		}
+			final_output();
 	}
-	else if(result.fileflag == 1)
+	else if(result.fileflag == 1) // file input
 	{
 		std::ifstream ifs(result.filename);
 		if(!ifs)
@@ -259,16 +310,12 @@ int main(int argc, char* argv[])
 		else
 		{
 			while(getline(ifs,result.input))
-	    	{
-			    Tree a(result.input,result.left,result.right);
-			    display_output_oneline(a);
-		    }
+				final_output();
 		}
 	}
-	else
+	else // single command input
 	{
-		Tree a(result.input,result.left,result.right);
-		display_output_oneline(a);
+		final_output();
 	}
 
 	return 0;
