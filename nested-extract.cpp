@@ -215,13 +215,13 @@ void replace_oneline(Tree & tree)
 		if(result.rflag == 1)
 		{
 			std::cout<<result.input.substr(start,tree.header->begin+1-start);
-			std::cout<<first_split[i+1];
+			std::cout<<first_split.at(i+1);
 		    start = tree.header->end;
 		}
 		else if(result.rflag == 2)
 		{
 			std::cout<<result.input.substr(start,tree.header->begin-start);
-			std::cout<<first_split[i+1];
+			std::cout<<first_split.at(i+1);
 		    start = tree.header->end+1;
 		}
 
