@@ -85,19 +85,8 @@ ne -a '''\MS{1991} {\Hyperlink{abc}{H\"{o}bby}} {male} {AMerica} {e^{2x}}''' -r 
 ```bash
 ne -a '''\MS{1991} {\Hyperlink{abc}{H\"{o}bby}} {male} {AMerica} {e^{2x}}''' -r "1;1994;3;"
 ```
-Warning: if you want to use`-r`to delete the content, don't miss the final`;`! Because in the program, the command argument`1;1994;3;` will be splited into 4 parts, and the forth part is empty. Using empty to substute content acts like delete. Without the final`;`, the program doesn't how to do, Althought sometimes it may works, but it's not safe! 
+Warning: if you want to use`-r`to delete the content, don't miss the final`;`! Because in the program, the command argument`1;1994;3;` will be splited into 4 parts, and the forth part is empty. Using empty to substute content acts like delete. Without the final`;`, the program doesn't know how to do. Althought sometimes it may works, but it's not safe!
 
 ## need to do in the future
 - add debug module
 - add modern `try...except`
-
-
-`vector`越界检查，对于
-```cpp
-./ne -R "2-1;zhf;4"  -a '''\MS{10:30--10:55}{\Hyperlink{hollbachersusanne}{H\"{o}llbacher, Susanne} }{}{AMCS, KAUST}{\nGradient-consistent finite}'''
-```
-程序会正常运行，得到和
-```cpp
-./ne -R "2-1;zhf;4;"  -a '''\MS{10:30--10:55}{\Hyperlink{hollbachersusanne}{H\"{o}llbacher, Susanne} }{}{AMCS, KAUST}{\nGradient-consistent finite}'''
-```
-相同的结果，但是上一个程序在运行过程中超过了`vector`的界限，如果使用`vec.at(n)`会使程序变慢。应该严格按照格式要求输入。
