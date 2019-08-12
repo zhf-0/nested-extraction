@@ -1,6 +1,6 @@
 # nested extraction
 
-The command line tool `nested extraction`, abbreviated as `ne` is orignally designed to extract information from `latex`. But it can also be used to extract any content between any pair of symbols from strings. For now, its functionality will only be demonstrated within `latex`.
+The command line tool `nested extraction`, abbreviated as `ne` is originally designed to extract information from `latex`. But it can also be used to extract any content between any pair of symbols from strings. For now, its functionality will only be demonstrated within `latex`.
 
 Some other command line tools, like`awk`, can also extract content from a pair of symbols, but it is not easy to extract content from nested pari of symbols, which is quite common in `latex`. With the help of`ne`,the solution will be much easy and intuitive.
 
