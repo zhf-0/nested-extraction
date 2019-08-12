@@ -1,0 +1,2 @@
+\MS{1991}{\Hyperlink{abc}{H\"{o}bby} }{male}{AMerica}{e^{2x}}
+\MS{1993}{\Hyperlink{de}{Helen }{female}{AMerica}{\sum^{n}_{i=1}a_i}
